@@ -183,6 +183,18 @@ export default function Experience() {
       {/* room 3dModel */}
       <Center>
         <Model position-y={[1]} cameraControlsRef={cameraControlsRef} />
+        <mesh
+          rotation-x={-Math.PI / 2}
+          position-y={0.8}
+          position-x={-0.05}
+          position-z={0.06}
+          receiveShadow={false}
+          castShadow={false}
+          visible={true}
+        >
+          <boxGeometry args={[4.495, 4.45, 0.1]} />
+          <meshStandardMaterial color="grey" side={THREE.DoubleSide} />
+        </mesh>
       </Center>
     </>
   );
