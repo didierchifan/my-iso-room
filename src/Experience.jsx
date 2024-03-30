@@ -1,19 +1,22 @@
-import { Sparkles, Center, CameraControls } from "@react-three/drei";
+import { Sparkles, Center, CameraControls, Html } from "@react-three/drei";
+import { useMemo, useRef, useState } from "react";
 import { useControls, button, buttonGroup, folder } from "leva";
 import { Perf } from "r3f-perf";
-import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { Model } from "./3dModel";
 
 export default function Experience() {
+  const cameraControlsRef = useRef();
+
   //performance monitor
   const { perfMonitor } = useControls({
     perfMonitor: false,
   });
 
-  //leva tweaks
+  //LEVA
 
+  ///////background color///////
   const { bgcolor, goToSleep, spotLampOn } = useControls({
     goToSleep: false,
     bgcolor: {
@@ -21,6 +24,7 @@ export default function Experience() {
     },
   });
 
+  ///////lamp lights///////
   const lamps = useControls("LampLights", {
     donutLight: {
       value: 10,
@@ -32,6 +36,7 @@ export default function Experience() {
     spotLampOn: true,
   });
 
+  ///////tv light///////
   const tvControls = useControls("tvLightControls", {
     color: "#7ac9ff",
     strength: {
@@ -42,19 +47,9 @@ export default function Experience() {
     },
   });
 
-  const spotlight = useMemo(() => new THREE.SpotLight("#fff"), []);
-
-  const cameraControlsRef = useRef();
-
-  ///////CAMERA CONTROLS LEVA///////
+  ///////camera controls///////
   const { DEG2RAD } = THREE.MathUtils;
-  const {
-    minDistance,
-    enabled,
-    verticalDragToForward,
-    dollyToCursor,
-    infinityDolly,
-  } = useControls({
+  const {} = useControls({
     phiGrp: buttonGroup({
       label: "rotate vertical",
       opts: {
@@ -71,17 +66,17 @@ export default function Experience() {
     }),
     resetCamera: button(() => cameraControlsRef.current?.reset(true)),
   });
-  ///////CAMERA CONTROLS LEVA///////
 
-  // const { positionX, positionY, positionZ, rotationX, rotationY, rotationZ } =
-  //   useControls({
-  //     positionX: { value: 1, step: 0.01, min: -5, max: 5 },
-  //     positionY: { value: 1, step: 0.01, min: -5, max: 5 },
-  //     positionZ: { value: 1, step: 0.01, min: -5, max: 5 },
-  //     rotationX: { value: 1, step: 0.01, min: -5, max: 5 },
-  //     rotationY: { value: 1, step: 0.01, min: -5, max: 5 },
-  //     rotationZ: { value: 1, step: 0.01, min: -5, max: 5 },
-  //   });
+  // painting spotlight
+  const spotlight = useMemo(() => new THREE.SpotLight("#fff"), []);
+
+  //lights switch
+  const [ambientLight, setAmbientLight] = useState(2.3);
+
+  function handleAmbientLight() {
+    const currentAmbientLight = ambientLight === 2.3 ? 0.1 : 2.3;
+    setAmbientLight(currentAmbientLight);
+  }
 
   return (
     <>
@@ -103,7 +98,12 @@ export default function Experience() {
         maxAzimuthAngle={Math.PI * 2}
       />
 
-      <ambientLight intensity={goToSleep ? 0.1 : 2.3} />
+      <Html position-y={3}>
+        <label onClick={handleAmbientLight} class="switch-toggle-container">
+          <input class="switch-toggle-input" type="checkbox" />
+          <span class="switch-toggle"></span>
+        </label>
+      </Html>
 
       <Sparkles
         size={3}
@@ -114,6 +114,8 @@ export default function Experience() {
         speed={0.3}
         count={50}
       />
+
+      <ambientLight intensity={ambientLight} />
 
       {/* tv ambient light */}
       <rectAreaLight
@@ -137,21 +139,6 @@ export default function Experience() {
         intensity={lamps.donutLight}
         color={"#ff8f00"}
       />
-
-      {/* <mesh
-        position-x={positionX}
-        position-y={positionY}
-        position-z={positionZ}
-        rotation-x={rotationX}
-        rotation-y={rotationY}
-        rotation-z={rotationZ}
-        visible={true}
-      >
-        <boxGeometry args={[0.3, 0.3, 0.3]} />
-        <meshStandardMaterial color={"red"} />
-      </mesh> */}
-
-      {/* ikea lamp light */}
 
       {/* laptop light */}
       {/* <rectAreaLight

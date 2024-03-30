@@ -196,3 +196,78 @@ body,
     transform: rotate(360deg);
   }
 }
+
+/* ios toggle switch */
+
+/*  Mobile Toggle Switch */
+.switch-toggle-input {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+.switch-toggle-container {
+  position: relative;
+  display: inline-block;
+}
+
+.switch-toggle {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 10px;
+  width: 50px;
+  height: 30px;
+  background: #ddd;
+  border-radius: 50px;
+  transition: background 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.switch-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  background: #fff;
+  border-radius: 50px;
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.15);
+  transition: left 0.2s ease-in-out, width 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+.switch-toggle-input:checked + .switch-toggle {
+  background: #30e16b;
+}
+
+.switch-toggle-input:checked + .switch-toggle::after {
+  left: calc(100% - 2px);
+  transform: translateX(-100%);
+}
+
+.switch-toggle-input:disabled {
+  pointer-events: none;
+}
+
+.switch-toggle-input:disabled + .switch-toggle {
+  cursor: not-allowed;
+  background: #eaeaea;
+}
+
+.switch-toggle-input:disabled + .switch-toggle::after {
+  background: #f8f8f8;
+}
+
+.switch-toggle-input:focus + .switch-toggle::before,
+.switch-toggle-container:active
+  .switch-toggle-input:not([disabled])
+  + .switch-toggle::before {
+  outline: 2px solid #5195fe;
+  outline-offset: 2px;
+}
+
+.switch-toggle-container:active
+  .switch-toggle-input:not([disabled])
+  + .switch-toggle::after {
+  width: 34px;
+}
