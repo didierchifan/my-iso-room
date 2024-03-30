@@ -97,7 +97,6 @@ export function Model({ cameraControlsRef, ...props }) {
   // -------------------- handle click outside tooltip\
 
   const handleDocumentClick = () => {
-    console.log("click afara", activeToolTip);
     if (activeToolTip) {
       setActiveTooltip(null);
     }
