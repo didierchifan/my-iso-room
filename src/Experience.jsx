@@ -1,12 +1,12 @@
 import { Sparkles, Center, CameraControls, Html } from "@react-three/drei";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useControls, button, buttonGroup, folder } from "leva";
 import { Perf } from "r3f-perf";
 import * as THREE from "three";
 
 import { Model } from "./3dModel";
 
-export default function Experience() {
+export default function Experience({ caca, ambientLightRef }) {
   const cameraControlsRef = useRef();
 
   //performance monitor
@@ -73,10 +73,30 @@ export default function Experience() {
   //lights switch
   const [ambientLight, setAmbientLight] = useState(2.3);
 
-  function handleAmbientLight() {
-    const currentAmbientLight = ambientLight === 2.3 ? 0.1 : 2.3;
+  function handleAmbientLight(event) {
+    const currentAmbientLight = event.detail.isChecked ? 0.1 : 2.3;
     setAmbientLight(currentAmbientLight);
   }
+
+  const handleCaca = (e) => {
+    console.log("click pe caca", e.detail.text);
+  };
+
+  useEffect(() => {
+    window.addEventListener("customCheckboxClick", handleAmbientLight);
+    window.addEventListener("customCacaClick", handleCaca);
+    window.addEventListener("handleInput", (e) => {
+      console.log(e.detail.inputText);
+    });
+
+    return () => {
+      window.removeEventListener("customCheckboxClick", handleAmbientLight);
+      window.removeEventListener("customCacaClick", handleCaca);
+      window.removeEventListener("handleInput", () => {
+        console.log("se renunta la input");
+      });
+    };
+  }, []);
 
   return (
     <>
@@ -97,13 +117,6 @@ export default function Experience() {
         minAzimuthAngle={Math.PI * 2 - 1.57}
         maxAzimuthAngle={Math.PI * 2}
       />
-
-      <Html position-y={3}>
-        <label onClick={handleAmbientLight} class="switch-toggle-container">
-          <input class="switch-toggle-input" type="checkbox" />
-          <span class="switch-toggle"></span>
-        </label>
-      </Html>
 
       <Sparkles
         size={3}
